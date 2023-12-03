@@ -48,6 +48,7 @@ class Product extends Model
         ]);
      }
 
+    //  新規登録処理
      public function storeProductNoImg(ProductRequest $request) {
         // DB::table('products')->insert([
            $this->create([  
@@ -59,6 +60,7 @@ class Product extends Model
         ]);
      }
      
+    //  商品情報編集処理
      public function updateProduct(ProductRequest $request, $img_path, $id) {
         $this->findOrFail($id)->update([
             'product_name' => $request->product_name,
