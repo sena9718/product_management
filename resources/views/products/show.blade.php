@@ -4,6 +4,7 @@
 <div class="container">
     <h1 class="mb-4">商品情報詳細画面</h1>
 
+    
     <dl class="row mt-3" >
         <dt class="col-sm-3">ID</dt>
         <dd class="col-sm-9">{{ $product->id }}</dd>
