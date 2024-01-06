@@ -14,7 +14,7 @@ class Product extends Model
      protected $table = 'products';
      
      // 検索処理
-     public function searchList($keyword, $searchCompany) 
+     public function searchList($keyword, $searchCompany, $min_price, $max_price, $min_stock, $max_stock, $sortColumn = 'id', $sortOrder ='desc') 
      {
         // productsテーブルからデータ取得。companiesテーブルをjoin
          $query = DB::table('products')
@@ -27,9 +27,24 @@ class Product extends Model
          if($searchCompany) {
              $query->where('products.company_id', '=', $searchCompany);
          }
+        //  価格下限〜上限
+        if($min_price) {
+            $query->where('products.price', '>=', $min_price);
+        }
+        if($max_price) {
+            $query->where('products.price', '>=', $max_price);
+        }
+        // 在庫数下限〜上限
+        if($min_stock) {
+            $query->where('products.stock', '>=', $min_stock);
+        }
+        if($max_stock) {
+            $query->where('products.stock', '>=', $max_stock);
+        }
+         $query->orderBy($sortColumn, $sortOrder);
+
          return $query->get();
      }
-
      public function getProductById($id)
      {
         return $this->findOrFail($id);

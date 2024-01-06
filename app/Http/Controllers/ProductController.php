@@ -16,13 +16,38 @@ class ProductController extends Controller
     {
         $keyword = $request->input('keyword');
         $searchCompany = $request->input('search-company');
+        $min_price = $request->input('min_price');
+        $max_price = $request->input('max_price');
+        $min_stock = $request->input('min_stock');
+        $max_stock = $request->input('max_stock');
+        $sortColumn = $request->input('sort', 'id');
+        $sortOrder = $request->input('order', 'desc');
 
         $model = new Product;
-        $products = $model->searchList($keyword, $searchCompany);
+        $products = $model->searchList($keyword, $searchCompany, $min_price, $max_price, $min_stock, $max_stock, $sortColumn, $sortOrder);
 
         $companies = DB::table('companies')->get();
 
-        return view('products.index', compact('products', 'companies'));
+        return view('products.index', compact('products', 'companies', 'sortColumn', 'sortOrder'));
+    }
+    
+    public function search(Request $request)
+    {    
+        // リクエストから検索パラメータを抽出
+        $keyword = $request->input('keyword');
+        $searchCompany = $request->input('search-company');
+        $min_price = $request->input('min_price');
+        $max_price = $request->input('max_price');
+        $min_stock = $request->input('min_stock');
+        $max_stock = $request->input('max_stock');
+        $sortColumn = $request->input('sort', 'id');
+        $sortOrder = $request->input('order', 'desc');
+
+        // 既存の searchList メソッドを使用して検索を実行
+        $products = $this->searchList($keyword, $searchCompany, $min_price, $max_price, $min_stock, $max_stock, $sortColumn, $sortOrder);
+
+        // 検索結果を表示するビューを返す
+        return response()->json(['products' => $products]);
     }
 
     // 新規登録画面表示
