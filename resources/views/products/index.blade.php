@@ -63,7 +63,7 @@
             </thead>
             <tbody>
             @foreach ($products as $product)
-                <tr>
+                <tr data-product-id="{{ $product->id }}">
                     <td>{{ $product->id }}</td>
                     <td><img src="{{ asset($product->img_path) }}" alt="商品画像" width="100"></td>
                     <td>{{ $product->product_name }}</td>
@@ -98,7 +98,8 @@
 
             if (confirm("削除しますか？")) {
                 $.ajax({
-                    type: 'DELETE',
+                    type: 'POST',
+                    data:{'_method':'delete'},
                     url: '/products/' + productId,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

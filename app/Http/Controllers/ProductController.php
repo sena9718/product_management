@@ -44,6 +44,7 @@ class ProductController extends Controller
         $sortOrder = $request->input('order', 'desc');
 
         // 既存の searchList メソッドを使用して検索を実行
+        $model = new Product;
         $products = $this->searchList($keyword, $searchCompany, $min_price, $max_price, $min_stock, $max_stock, $sortColumn, $sortOrder);
 
         // 検索結果を表示するビューを返す
