@@ -93,7 +93,9 @@
 <script>
     $(document).ready(function () {
         // 商品データを削除するための Ajax リクエスト
-        $('.delete-product').on('click', function () {
+        $('.delete-product').on('click', function (event) {
+            event.preventDefault();
+            
             var productId = $(this).data('product-id');
 
             if (confirm("削除しますか？")) {
@@ -131,11 +133,42 @@
 
                     if(data.products.length > 0) {
                         // データが存在する場合の処理
+                        var newTableHtml = '<table class="table table-striped">' +
+                            '<thead><tr>' +
+                            '<th>ID</th>' +
+                            '<th>商品画像</th>' +
+                            '<th>商品名</th>' +
+                            '<th>価格</th>' +
+                            '<th>在庫数</th>' +
+                            '<th>メーカー名</th>' +
+                            '<th></th>' +
+                            '</tr></thead><tbody>';
+
                         $.each(data.products, function (index, product) {
                             // 適切な方法でデータを表示するための処理
-                            var productHtml = '<tr><td>' + product.id + '</td><td>' + product.product_name + '</td>...</tr>';
-                            $('#search-results').append(productHtml);
+                            newTableHtml += '<tr>' +
+                                '<td>' + product.id + '</td>' +
+                                '<td><img src="' + product.img_path + '" alt="商品画像" width="100"></td>' +
+                                '<td>' + product.product_name + '</td>' +
+                                '<td>' + product.price + '</td>' +
+                                '<td>' + product.stock + '</td>' +
+                                '<td>' + product.company_name + '</td>' +
+                                '<td>' +
+                                '<a href="/products/show/' + product.id + '" class="btn btn-info btn-sm mx-1">詳細</a>' +
+                                '<form method="POST" action="/products/' + product.id + '" class="d-inline">' +
+                                '@csrf' +
+                                '@method("DELETE")' +
+                                '<button type="submit" class="btn btn-danger btn-sm mx-1 delete-product" data-product-id="' + product.id + '">削除</button>' +
+                                '</form>' +
+                                '</td>' +
+                                '</tr>';
                         });
+                        
+                        newTableHtml += '</tbody></table>';
+
+                        $('.products').hide();
+
+                        $('#search-results').html(newTableHtml);
                     } else {
                         // データが存在しない場合の処理
                         $('#search-results').html('<p>該当する商品が見つかりませんでした。</p>');
