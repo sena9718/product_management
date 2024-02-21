@@ -5,14 +5,14 @@
         <h1 class="mb-4">検索結果</h1>
 
         <div class="products mt-5">
-            <table class="table table-striped">
+            <table class="table table-striped tablesorter" id="table_sort">
               <thead>
                 <tr>
-                    <th><a href="{{ route('products.index', ['sort' => 'id', 'order' => $sortColumn == 'id' && $sortOrder == 'asc' ? 'desc' : 'asc']) }}">ID</a></th>
+                    <th>ID</th>
                     <th>商品画像</th>
-                    <th><a href="{{ route('products.index', ['sort' => 'product_name', 'order' => $sortColumn == 'product_name' && $sortOrder == 'asc' ? 'desc' : 'asc']) }}">商品名</a></th>
-                    <th><a href="{{ route('products.index', ['sort' => 'price', 'order' => $sortColumn == 'price' && $sortOrder == 'asc' ? 'desc' : 'asc']) }}">価格</a></th>
-                    <th><a href="{{ route('products.index', ['sort' => 'stock', 'order' => $sortColumn == 'stock' && $sortOrder == 'asc' ? 'desc' : 'asc']) }}">在庫数</th>
+                    <th>商品名</th>
+                    <th>価格</th>
+                    <th>在庫数</th>
                     <th>メーカー名</th>
                     <th><a href="{{ route('products.create') }}" class="btn btn-warning">新規登録</a></th>                
                 </tr>

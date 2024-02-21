@@ -49,16 +49,16 @@
     </div>
 
     <div class="products mt-5">
-        <table class="table table-striped">
+        <table class="table table-striped tablesorter" id="table_sort">
             <thead>
                 <tr>
-                    <th><a href="{{ route('products.index', ['sort' => 'id', 'order' => $sortColumn == 'id' && $sortOrder == 'asc' ? 'desc' : 'asc']) }}">ID</a></th>
+                    <th>ID</th>
                     <th>商品画像</th>
-                    <th><a href="{{ route('products.index', ['sort' => 'product_name', 'order' => $sortColumn == 'product_name' && $sortOrder == 'asc' ? 'desc' : 'asc']) }}">商品名</a></th>
-                    <th><a href="{{ route('products.index', ['sort' => 'price', 'order' => $sortColumn == 'price' && $sortOrder == 'asc' ? 'desc' : 'asc']) }}">価格</a></th>
-                    <th><a href="{{ route('products.index', ['sort' => 'stock', 'order' => $sortColumn == 'stock' && $sortOrder == 'asc' ? 'desc' : 'asc']) }}">在庫数</th>
+                    <th>商品名</th>
+                    <th>価格</th>
+                    <th>在庫数</th>
                     <th>メーカー名</th>
-                    <th><a href="{{ route('products.create') }}" class="btn btn-warning">新規登録</a></th>                
+                    <th><a href="{{ route('products.create') }}" class="btn btn-warning">新規登録</a></th>
                 </tr>
             </thead>
             <tbody>
@@ -92,8 +92,40 @@
 @section('scripts')
 <script>
     $(document).ready(function () {
+
+        $(".tablesorter").tablesorter( {
+            sortList: [[0,1]]
+        });
+
+        // // 商品データを削除するための Ajax リクエスト
+        // $('.delete-product').on('click', function (event) {
+        //     event.preventDefault();
+            
+        //     var productId = $(this).data('product-id');
+
+        //     if (confirm("削除しますか？")) {
+        //         $.ajax({
+        //             type: 'POST',
+        //             data:{'_method':'delete'},
+        //             url: '/products/' + productId,
+        //             headers: {
+        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //             },
+        //             success: function (data) {
+        //                 // 削除された行を非表示にする
+        //                 $('tr[data-product-id="' + productId + '"]').hide();
+        //                 alert('削除しました。');
+        //             },
+        //             error: function (data) {
+        //                 alert('削除に失敗しました。');
+        //             }
+        //         });
+        //     }
+        // });
+        // }
+
         // 商品データを削除するための Ajax リクエスト
-        $('.delete-product').on('click', function (event) {
+        $(document).on('click', '.delete-product', function (event) {
             event.preventDefault();
             
             var productId = $(this).data('product-id');
@@ -110,6 +142,9 @@
                         // 削除された行を非表示にする
                         $('tr[data-product-id="' + productId + '"]').hide();
                         alert('削除しました。');
+
+                        // 削除後に検索を再度実行して画面を更新する
+                        $('#search-btn').trigger('click');
                     },
                     error: function (data) {
                         alert('削除に失敗しました。');
@@ -133,7 +168,7 @@
 
                     if(data.products.length > 0) {
                         // データが存在する場合の処理
-                        var newTableHtml = '<table class="table table-striped">' +
+                        var newTableHtml = '<table class="table table-striped tablesorter" id="table_sort">' +
                             '<thead><tr>' +
                             '<th>ID</th>' +
                             '<th>商品画像</th>' +
@@ -169,6 +204,9 @@
                         $('.products').hide();
 
                         $('#search-results').html(newTableHtml);
+
+                        // 検索後の結果にもtablesorterを適用
+                        $("#search-results table.tablesorter").tablesorter();
                     } else {
                         // データが存在しない場合の処理
                         $('#search-results').html('<p>該当する商品が見つかりませんでした。</p>');
